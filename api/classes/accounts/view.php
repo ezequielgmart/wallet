@@ -1,32 +1,37 @@
 <?php
     require "controller.php";
     require ("../classes/config/responses.php");
-    class Category{
+    class Accounts{
 
         public $control;
         public $responses;
 
         public function __construct() {
-           $this->control = new CategoryController;
+           $this->control = new AccountController;
            $this->responses = new Responses;
         }
 
-        public function get($user,$category=""){
-            if ($category == "") {
+        public function get($user,$accountId){
+            if ($accountId == "") {
                 
                 $result = $this->control->get($user); 
+
             } else {
                 
-                $result = $this->control->get($user,$category); 
+                $result = $this->control->get($user,$accountId); 
             }
-            
             
         }
 
         public function post($json){
             $result = $this->control->post($json);
-           echo $result;
 
+            if ($result > 0) {
+                $this->responses->created();
+            } else {
+                $this->responses->server_error();
+
+            }
 
         }
 
