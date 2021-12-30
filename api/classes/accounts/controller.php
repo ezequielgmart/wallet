@@ -9,35 +9,33 @@ class AccountController{
     public function __construct() {
         $this->model = new AccountModel;
     }
-    public function get($userId,$accountId=""){
-        if ($userId != "") {
-            if ($accountId =="") {
-                $result = $this->model->get($userId);
-            
-                if (empty($result)) {
-                    return 0;
-                } else {
-                    return $result;
-                }
-    
-            } else {
-                $result = $this->model->get($accountId,$userId);
-            
-                if (empty($result)) {
-                    return 0;
-                } else {
-                    return $result;
-                }
-    
-            }
-        } else {
-            return 400;
-        }
+    public function getAllAccountId($user){
+        $result = $this->model->getAllAccountId($user);
         
+        if (empty($result)) {
+            return 0;
+        } else {
+            $array = array();
+            foreach ($result as $value) {
+               $element = $value;
+               array_push($array,$element);
+
+               
+            }
+
+            return $array;
+
+        }
+    }
+    
+    public function get($userId,$accountId){
+        # if we haven't the account id we get all acount id based in user id provided
+        $result = $this->model->get($userId,$accountId);
+        
+        return $result;
       
        
    }
-   
     public function post($json){
         if (empty($json)) {
 

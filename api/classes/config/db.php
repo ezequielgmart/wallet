@@ -60,7 +60,32 @@
                 
             }
     
-            
+            public function getQuery($query){
+                $result = $this->conn->query($query);
+                $array = array();
+                foreach ($result as $key => $value) {
+                    $element = array();
+
+                    $element["accountId"] = $value["accountId"];
+                    $element["userId"] = $value["userId"];
+                    $element["accountName"] = $value["accountName"];
+                    $element["categorie"] = $value["categorie"];
+                    $element["accountingCategorie"] = $value["accountingCategorie"];
+                    $element["expenses"] = $value["expenses"];
+                    $element["incomes"] = $value["incomes"];
+                    $element["transferIn"] = $value["transferIn"];
+                    $element["transferOut"] = $value["transferOut"];
+                    $element["balance"] = $this->getAccountBalance($value["incomes"],$value["transferIn"],$value["expenses"],$value["transferOut"]);
+
+                    array_push($array, $element);
+    
+                }
+                return $array;
+            }
+            private function getAccountBalance($incomes,$transferIn,$transferOut,$expenses){
+                return ($incomes + $transferIn)-($transferOut + $expenses);
+
+            }
             public function getData($query){
                 $result = $this->conn->query($query);
                 $array = array();
@@ -71,6 +96,18 @@
                 return $array;
             }
     
+            public function getId($query){
+                $result = $this->conn->query($query);
+                $array = array();
+                foreach ($result as $key => $value){
+                    $element = $value["accountId"];
+
+                    array_push($array,$element);
+
+                }
+
+                return $array;
+            }
 
             public function json($json){
                 echo json_encode($json);

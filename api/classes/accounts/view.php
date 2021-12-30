@@ -11,14 +11,37 @@
            $this->responses = new Responses;
         }
 
-        public function get($user,$accountId){
-            if ($accountId == "") {
+        public function get($user,$account =""){
+            
                 
-                $result = $this->control->get($user); 
+            if ($account == "") {
+                
+                $accountId = $this->control->getAllAccountId($user); 
 
+                $array  = array();
+                foreach ($accountId as $key => $value) {
+                    # code..
+                    $result = $this->control->get($user,$value);
+                    array_push($array,$result);
+
+
+                }
+
+                $this->json($array);
+                // if (!empty($result)) {
+                //     $this->json($result);
+                // } else {
+                //     $this->responses->get_no_content();
+                // }
+                
             } else {
                 
-                $result = $this->control->get($user,$accountId); 
+                $result = $this->control->get($user,$account); 
+                if (!empty($result)) {
+                    $this->json($result);
+                } else {
+                    $this->responses->get_no_content();
+                }
             }
             
         }

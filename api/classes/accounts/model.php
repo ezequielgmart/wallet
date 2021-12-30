@@ -4,21 +4,23 @@ require ("../classes/config/db.php");
 
 class AccountModel extends Db{
    private $table = "accounts";
-   private $second = "typeaccounts";
-   private $third = "users";
+   private $second = "transactions";
 
-    public function get($userId,$accountId=""){
-        
-        if ($accountId == "") {
-            $query = $this->select($user);
-            return $result = parent::getData($query);
-        } else {
-            $query = $this->select($userId,$accountId);
-            return $result = parent::getData($query);
-        }
+   # To get all accounts id
+    public function getAllAccountId($user){
+        $query = $this->selectAllAccountIdByUser($user);
+        return $result = parent::getId($query);
+    }
+  
+    # to get all acount data
+    public function get($user, $accountId){
+
+        $query = $this->selectAccountById($user,$accountId);
+        return $result = parent::getQuery($query);
 
     }
 
+    
     public function post($json){
         
          $query = $this->insert($json);
@@ -45,42 +47,38 @@ class AccountModel extends Db{
         return  $query = "DELETE FROM
         $this->table 
         WHERE 
-        transactionCategoryId = '$json'
+        accountId = '$json'
         ";
 
     }
-
-    private function select($userId,$accountId=""){
-
-        if ($transactionCategoryId == "") {
-            return $query = "SELECT 
-            userId,
-            typeAccountId,
-            account,
-            currencyId,
-            categoryId,
-            note
-            from 
-            $this->table
-            WHERE
-            userId = '$userId'";
-        } else {
-            return $query = "SELECT 
-            transactionCategoryId,
-            userId,
-            transactionCategory,
-            categoryTypeId
-            from 
-            $this->table
-            WHERE
-            userId = '$userId' 
-            AND
-            transactionCategoryId='$transactionCategoryId'
-            ";
-        }
-        
-        
+    # to get all account function
+    private function selectAllAccountIdByUser($json){
+        return $query = "SELECT accountId from $this->table WHERE userId='$json'";
     }
+
+    # get all acount information 
+    private function selectAccountById($user,$accountId){
+            return $query = "SELECT 
+            $this->table.accountId,
+            $this->table.userId,
+            $this->table.accountName,
+            $this->table.categorie,
+            $this->table.accountingCategorie,
+            SUM(expenses) AS expenses,
+            SUM(incomes) AS incomes,
+            SUM(transferIn) AS transferIn,
+            SUM(transferOut) AS transferOut
+            from 
+            $this->table,
+            $this->second
+            WHERE
+            $this->table.userId = '$user' AND
+            $this->table.accountId = '$accountId'
+            AND
+            $this->second.accountId = $this->table.accountId";
+    }
+
+
 
     private function insert($json){
 

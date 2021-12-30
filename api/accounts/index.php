@@ -9,11 +9,11 @@
         if (isset($_GET["user"])) {
             $user = $_GET["user"];
 
-            if (isset($_GET["category"])) {
+            if (isset($_GET["account"])) {
             
-                $category = $_GET["category"];
+                $account = $_GET["account"];
                 
-                $_interface->get($user,$category);
+                $_interface->get($user,$account);
 
             } else {
             
@@ -35,11 +35,11 @@
     } else if($_SERVER["REQUEST_METHOD"] == "DELETE") {
 
 
-            if (isset($_GET["category"])) {
+            if (isset($_GET["account"])) {
             
-                $category = $_GET["category"];
+                $json = $_GET["account"];
                 
-                $_interface->delete($category);
+                $_interface->delete($json);
 
             } else {
             
