@@ -30,7 +30,7 @@ class AccountModel extends Db{
 
     public function delete($json){
        
-        $query = $this->del($json);
+        echo $query = $this->del($json);
         return $result = parent::nonQuery($query);
     
     }
@@ -85,28 +85,30 @@ class AccountModel extends Db{
         return $query = "INSERT INTO
         $this->table 
         (
-        userId,
-        accountName,
-        typeAccountId,
-        note
+         userId,
+         accountName,
+         categorie,
+         accountingCategorie
         )
         VALUES
         (
         '$json->userId',
-        '$json->account',
-        '$json->typeAccountId',
-        '$json->note'
+        '$json->accountName',
+        '$json->categorie',
+        '$json->accountingCategorie'
         )";
 
     }
 
     private function update($json){
-
+      
         return $query ="UPDATE $this->table SET
         `userId`='$json->userId',
-        `transactionCategory`='$json->transactionCategory',
-        `categoryTypeId`='$json->categoryType'
-         WHERE transactionCategoryId='$json->transactionCategoryId'";
+        `accountName`='$json->accountName',
+        `categorie`='$json->categorie',
+        `accountingCategorie`='$json->accountingCategorie'
+         WHERE accountId='$json->accountId' AND 
+         userId='$json->userId'";
 
     }
     
